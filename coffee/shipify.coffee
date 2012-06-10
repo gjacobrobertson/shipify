@@ -1,14 +1,96 @@
+
 $ ->
-  console.log "ON"
+  S = {}
   sp = getSpotifyApi(1)
   models = sp.require("sp://import/scripts/api/models")
   player = models.player
 
-  currentTrack = player.track
 
-  console.log currentTrack
-  console.log "Currently shipping to #{currentTrack}"
-  console.log $("#np")
 
-  if currentTrack?
-    $("#np").html "Currently shipping to #{currentTrack}"
+  class Theme
+    constructor: (track_uri, start, stop) ->
+      @track = models.Track.fromURI(track_uri)
+      @start = start
+      @stop = stop
+
+      @fadeTime = 1500
+
+    play: =>
+      S.playingTheme = true
+      player.track = @track
+      setTimeout @end, (@stop-@start)
+
+      setCorrectPosition = =>
+        # Give us some time to load the new track
+        if player.track.name != @track.name
+          setTimeout ->
+            setCorrectPosition()
+          , 100
+        else
+          player.position = @start
+
+      setCorrectPosition()
+
+    end: =>
+      player.track = S.track
+
+      # Give us some time to load the new track
+      setCorrectPosition = =>
+        player.position = S.position
+
+        if player.track.name != S.track.name
+          setTimeout ->
+            setCorrectPosition()
+          , 100
+        else
+          S.playingTheme = false
+
+      setCorrectPosition()
+
+    fadeOut: (callback=->)=>
+      # Does not currently work
+      # http://stackoverflow.com/questions/10822979/change-volume-with-spotify-app-api
+      timeInterval = @fadeTime/10
+      console.log @fadeTime
+      for level in [10..1]
+        do (level) =>
+          setTimeout =>
+            player.volume = 0.1*level
+            console.log 0.1*level
+          , timeInterval*level
+      setTimeout callback, @fadeTime
+
+  themes =
+    # trex: new Theme('spotify:track:3MrRksHupTVEQ7YbA0FsZK', 13000, 54000)
+    trex: new Theme('spotify:track:3MrRksHupTVEQ7YbA0FsZK', 13000, 20000)
+
+
+
+  # Loop
+  #
+  #
+  #
+  updateCurrentlyPlaying = ->
+
+    if !S.playingTheme
+
+      currentTrack = player.track
+
+      S.position = player.position
+      S.track = currentTrack
+      console.log S.position
+
+      if currentTrack?
+        $("#np").html "Currently shipping to #{currentTrack}"
+
+
+  setInterval updateCurrentlyPlaying, 1000
+
+
+
+  # Buttons
+  #
+  #
+  #
+  $('#play').click ->
+    themes.trex.play()
