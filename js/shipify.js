@@ -3,8 +3,10 @@
   var __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
 
   $(function() {
-    var S, Theme, models, player, sp, themes, updateCurrentlyPlaying;
-    S = {};
+    var Theme, handle, models, player, request, sp, themes, updateCurrentlyPlaying, xhr;
+    window.S = {
+      serverURL: 'http://shipify-server.herokuapp.com/'
+    };
     sp = getSpotifyApi(1);
     models = sp.require("sp://import/scripts/api/models");
     player = models.player;
@@ -81,8 +83,9 @@
 
     })();
     themes = {
-      trex: new Theme('spotify:track:3MrRksHupTVEQ7YbA0FsZK', 13000, 54000),
-      cdog: new Theme('spotify:track:2BY7ALEWdloFHgQZG6VMLA', 12000, 44000)
+      nottombrown: new Theme('spotify:track:3MrRksHupTVEQ7YbA0FsZK', 13000, 54000),
+      facedog: new Theme('spotify:track:2BY7ALEWdloFHgQZG6VMLA', 12000, 44000),
+      waxman: new Theme('spotify:track:2BY7ALEWdloFHgQZG6VMLA', 12000, 44000)
     };
     updateCurrentlyPlaying = function() {
       var currentTrack;
@@ -96,6 +99,27 @@
       }
     };
     setInterval(updateCurrentlyPlaying, 200);
+    window.parseCommit = function(commitJSON) {
+      S.thing = commitJSON;
+      return console.log(commitJSON);
+    };
+    xhr = new XMLHttpRequest();
+    request = 'http://search.twitter.com/search.json?q=open.spotify.com%2Ftrack&include_entities=true';
+    request = 'http://shipify-server.herokuapp.com/';
+    xhr.open('GET', request);
+    xhr.onreadystatechange = function() {
+      var data;
+      if (xhr.readyState !== 4) {
+        return;
+      }
+      console.log(xhr);
+      data = JSON.parse(xhr.responseText);
+      return handle(data);
+    };
+    xhr.send(null);
+    handle = function(data) {
+      return console.log(data);
+    };
     $('#play-trex').click(function() {
       return themes.trex.play();
     });
