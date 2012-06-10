@@ -6,7 +6,6 @@ $ ->
   player = models.player
 
 
-
   class Theme
     constructor: (track_uri, start, stop) ->
       @track = models.Track.fromURI(track_uri)
@@ -61,30 +60,29 @@ $ ->
       setTimeout callback, @fadeTime
 
   themes =
-    # trex: new Theme('spotify:track:3MrRksHupTVEQ7YbA0FsZK', 13000, 54000)
-    trex: new Theme('spotify:track:3MrRksHupTVEQ7YbA0FsZK', 13000, 20000)
+    trex: new Theme('spotify:track:3MrRksHupTVEQ7YbA0FsZK', 13000, 54000)
+    cdog: new Theme('spotify:track:2BY7ALEWdloFHgQZG6VMLA', 12000, 44000)
 
 
 
-  # Loop
+  # Loops
   #
   #
   #
   updateCurrentlyPlaying = ->
-
     if !S.playingTheme
-
       currentTrack = player.track
 
       S.position = player.position
       S.track = currentTrack
-      console.log S.position
+      # console.log S.position
 
       if currentTrack?
         $("#np").html "Currently shipping to #{currentTrack}"
 
+  setInterval updateCurrentlyPlaying, 200
 
-  setInterval updateCurrentlyPlaying, 1000
+
 
 
 
@@ -92,5 +90,9 @@ $ ->
   #
   #
   #
-  $('#play').click ->
+  $('#play-trex').click ->
     themes.trex.play()
+
+
+  $('#play-cdog').click ->
+    themes.cdog.play()

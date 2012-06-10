@@ -81,7 +81,8 @@
 
     })();
     themes = {
-      trex: new Theme('spotify:track:3MrRksHupTVEQ7YbA0FsZK', 13000, 20000)
+      trex: new Theme('spotify:track:3MrRksHupTVEQ7YbA0FsZK', 13000, 54000),
+      cdog: new Theme('spotify:track:2BY7ALEWdloFHgQZG6VMLA', 12000, 44000)
     };
     updateCurrentlyPlaying = function() {
       var currentTrack;
@@ -89,15 +90,17 @@
         currentTrack = player.track;
         S.position = player.position;
         S.track = currentTrack;
-        console.log(S.position);
         if (currentTrack != null) {
           return $("#np").html("Currently shipping to " + currentTrack);
         }
       }
     };
-    setInterval(updateCurrentlyPlaying, 1000);
-    return $('#play').click(function() {
+    setInterval(updateCurrentlyPlaying, 200);
+    $('#play-trex').click(function() {
       return themes.trex.play();
+    });
+    return $('#play-cdog').click(function() {
+      return themes.cdog.play();
     });
   });
 
