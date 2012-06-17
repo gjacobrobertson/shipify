@@ -1,2 +1,0 @@
-Use supervisor for development
-supervisor -e 'node|js|coffee' web.js

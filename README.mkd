@@ -1,65 +1,22 @@
-# Spotify Apps API Tutorial
+# Shipify
 
-This is a Spotify App that explains how to make a Spotify App. 
-
-For API Guidelines, click [here](http://developer.spotify.com/download/spotify-apps-api/guidelines/).
-
-![Spotify Apps Tutorial home screen](https://github.com/spotify/apps-tutorial/raw/master/img/spotify-apps-tutorial-v2.jpg)
+Play themesongs for people whenever they ship code to github.
 
 ## Topics covered
 
 #### Getting started
 
- * Creating your manifest file
- * Handling arguments and creating navigational tabs
- * Dragging and dropping content into an app (coming soon)
- * Show "Share" popup
+Set up your [shipify-server](https://github.com/Grouper/shipify-server)
 
-#### UI
+Set a post commit-hook to ping your [shipify-server](https://github.com/Grouper/shipify-server)
 
- * Using standard components for buttons
- * Track-listing components (coming soon)
- * Using the pager element (coming soon)
+Sign up for a [developer account on Spotify](http://developer.spotify.com/en/spotify-apps-api/developer-signup/)
 
-#### Playing music
+Check out this repo to ~/Spotify/shipify
 
- * Play a single song
- * Play a list of songs
- * Get the currently-playing track
- * Create a play/pause button with an HTML element
- * Skip to the next or previous track
- * Get a user's top tracks
+Set your themesongs in settings.js (right click a song to get the URI)
 
-#### Searching
+Type 'spotify:app:shipify' into your Spotify search bar
 
- * Returning all tracks with a given search query
+Get Shipping
 
-#### Playlists
-
- * Add a song to a playlist
- * Get songs from a playlist URL
- * Subscribe to a playlist
- * Showing a playlist mosiac image
-
-#### Interacting with Facebook
-
- * Authenticate a user with Facebook
- * Get a user's listening history from Facebook
-
-#### Experimental & Unsupported
-
- * Talking to Twitter
- * Create an EchoNest radio station
- * Display a Polymaps object
- * Template
-
-## Installation
-
- 1. Sign up for a [developer account on Spotify](http://developer.spotify.com/en/spotify-apps-api/developer-signup/) 
- 2. Open Terminal, `mkdir ~/Spotify`
- 3. `cd ~/Spotify`
- 4. `git clone git@github.com:spotify/apps-tutorial.git`
- 6. Download the [latest version of Spotify](http://spotify.com/download)
- 7. Open Spotify and type "spotify:app:tutorial" in the search bar
-
-Your feedback is welcome! Please email mager@spotify.com.
