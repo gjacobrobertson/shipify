@@ -4,24 +4,42 @@
 
         <style>
             @import url('sp://import/css/eve.css');
-            @import url('sp://tutorial/css/main.css');
-            @import url('sp://tutorial/css/github.css');
+            @import url('sp://shipify/css/main.css');
+            @import url('sp://shipify/css/github.css');
         </style>
 
+        <link href='sp://shipify/css/bootstrap.min.css' rel="stylesheet">
         <script src="sp://shipify/js/jquery.min.js"></script>
         <script src="sp://shipify/js/shipify.js"></script>
         <script src="sp://shipify/js/socket.io.js"></script>
+        <script src="sp://shipify/js/haml.js"></script>
         <script src="http://www.joingrouper.com/bootstrap2/js/bootstrap.min.js"></script>
 
     </head>
     <body>
         <div id="wrapper">
 
-          <p>
-            <a id="play-trex" href="#"> Play trex theme</a>
-          </p>
-          <a id="play-cdog" href="#"> Play cdog theme</a>
-          <div id="np"></div>
+          <table class="table table-bordered themesongs">
+            <thead>
+              <th>
+                Username
+              </th>
+              <th>
+                Themesong
+              </th>
+              <th>
+                Range
+              </th>
+              <th></th>
+
+          </table>
+
+          <h2 style="text-align: center">
+            Shipping to
+            <div>
+              <small id="np"></small>
+            </div
+          </h2>
         </div><!-- /wrapper -->
     </body>
 </html>

@@ -1,7 +1,28 @@
 
+
 $ ->
+
+  themesongs =
+    nottombrown: ['spotify:track:3MrRksHupTVEQ7YbA0FsZK', 13000, 54000]
+    facedog: ['spotify:track:2BY7ALEWdloFHgQZG6VMLA', 12000, 44000]
+    waxman: ['spotify:track:2BY7ALEWdloFHgQZG6VMLA', 12000, 44000]
+
+
   window.S =
     serverURL: 'http://shipify-server.herokuapp.com/'
+    themesongs: themesongs
+
+  themeTemplate = Haml("""
+  %tr
+    %td.username=username
+    %td.themesong=themesong
+    %td.range=range
+    %td
+      %a.preview play
+  """)
+  console.log themeTemplate
+
+
 
   sp = getSpotifyApi(1)
   models = sp.require("sp://import/scripts/api/models")
@@ -9,12 +30,27 @@ $ ->
 
 
   class Theme
-    constructor: (track_uri, start, stop) ->
+    constructor: (track_uri, start, stop, username) ->
       @track = models.Track.fromURI(track_uri)
       @start = start
       @stop = stop
+      @username = username
+
+      console.log @username
+      console.log @track
 
       @fadeTime = 1500
+      @render()
+
+
+    render: =>
+      html = $ themeTemplate
+        username: @username
+        themesong: @track
+        range: "#{@start/1000}s - #{@stop/1000}s"
+      html.find('.preview').click =>
+        @play()
+      html.appendTo $('.themesongs')
 
     play: =>
       S.playingTheme = true
@@ -61,12 +97,15 @@ $ ->
           , timeInterval*level
       setTimeout callback, @fadeTime
 
-  themes =
-    # nottombrown: new Theme('spotify:track:3MrRksHupTVEQ7YbA0FsZK', 13000, 54000)
-    nottombrown: new Theme('spotify:track:2BY7ALEWdloFHgQZG6VMLA', 12000, 44000)
-    facedog: new Theme('spotify:track:2BY7ALEWdloFHgQZG6VMLA', 12000, 44000)
-    waxman: new Theme('spotify:track:2BY7ALEWdloFHgQZG6VMLA', 12000, 44000)
+  themes = {}
 
+  for username, song of S.themesongs
+    do (themes, username, song) ->
+      console.log username
+      console.log song
+      themes[username] = new Theme(song[0], song[1], song[2], username)
+
+  console.log themes
   # Loops
   #
   #
@@ -80,7 +119,7 @@ $ ->
       # console.log S.position
 
       if currentTrack?
-        $("#np").html "Currently shipping to #{currentTrack}"
+        $("#np").html "#{currentTrack}"
 
   setInterval updateCurrentlyPlaying, 200
 

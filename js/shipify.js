@@ -3,26 +3,54 @@
   var __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
 
   $(function() {
-    var Theme, models, player, socket, sp, themes, updateCurrentlyPlaying;
-    window.S = {
-      serverURL: 'http://shipify-server.herokuapp.com/'
+    var Theme, models, player, socket, song, sp, themeTemplate, themes, themesongs, updateCurrentlyPlaying, username, _fn, _ref;
+    themesongs = {
+      nottombrown: ['spotify:track:3MrRksHupTVEQ7YbA0FsZK', 13000, 54000],
+      facedog: ['spotify:track:2BY7ALEWdloFHgQZG6VMLA', 12000, 44000],
+      waxman: ['spotify:track:2BY7ALEWdloFHgQZG6VMLA', 12000, 44000]
     };
+    window.S = {
+      serverURL: 'http://shipify-server.herokuapp.com/',
+      themesongs: themesongs
+    };
+    themeTemplate = Haml("%tr\n  %td.username=username\n  %td.themesong=themesong\n  %td.range=range\n  %td\n    %a.preview play");
+    console.log(themeTemplate);
     sp = getSpotifyApi(1);
     models = sp.require("sp://import/scripts/api/models");
     player = models.player;
     Theme = (function() {
 
-      function Theme(track_uri, start, stop) {
+      function Theme(track_uri, start, stop, username) {
         this.fadeOut = __bind(this.fadeOut, this);
 
         this.end = __bind(this.end, this);
 
         this.play = __bind(this.play, this);
+
+        this.render = __bind(this.render, this);
         this.track = models.Track.fromURI(track_uri);
         this.start = start;
         this.stop = stop;
+        this.username = username;
+        console.log(this.username);
+        console.log(this.track);
         this.fadeTime = 1500;
+        this.render();
       }
+
+      Theme.prototype.render = function() {
+        var html,
+          _this = this;
+        html = $(themeTemplate({
+          username: this.username,
+          themesong: this.track,
+          range: "" + (this.start / 1000) + "s - " + (this.stop / 1000) + "s"
+        }));
+        html.find('.preview').click(function() {
+          return _this.play();
+        });
+        return html.appendTo($('.themesongs'));
+      };
 
       Theme.prototype.play = function() {
         var setCorrectPosition,
@@ -82,11 +110,18 @@
       return Theme;
 
     })();
-    themes = {
-      nottombrown: new Theme('spotify:track:2BY7ALEWdloFHgQZG6VMLA', 12000, 44000),
-      facedog: new Theme('spotify:track:2BY7ALEWdloFHgQZG6VMLA', 12000, 44000),
-      waxman: new Theme('spotify:track:2BY7ALEWdloFHgQZG6VMLA', 12000, 44000)
+    themes = {};
+    _ref = S.themesongs;
+    _fn = function(themes, username, song) {
+      console.log(username);
+      console.log(song);
+      return themes[username] = new Theme(song[0], song[1], song[2], username);
     };
+    for (username in _ref) {
+      song = _ref[username];
+      _fn(themes, username, song);
+    }
+    console.log(themes);
     updateCurrentlyPlaying = function() {
       var currentTrack;
       if (!S.playingTheme) {
@@ -94,7 +129,7 @@
         S.position = player.position;
         S.track = currentTrack;
         if (currentTrack != null) {
-          return $("#np").html("Currently shipping to " + currentTrack);
+          return $("#np").html("" + currentTrack);
         }
       }
     };
@@ -104,7 +139,7 @@
       return console.log("Connected!");
     });
     socket.on('commit', function(data) {
-      var commit, theme, username;
+      var commit, theme;
       console.log(data);
       commit = data;
       username = commit.username;
