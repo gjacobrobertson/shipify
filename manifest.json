@@ -27,6 +27,7 @@
 	],
 	"RequiredInterface": 1,
 	"RequiredPermissions": [
+      "http://shipify-server.herokuapp.com",
 	    "http://api.twitter.com",
 	    "http://o.scdn.co",
 	    "http://maps.googleapis.com",

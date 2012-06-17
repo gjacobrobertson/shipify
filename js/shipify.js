@@ -3,7 +3,7 @@
   var __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
 
   $(function() {
-    var Theme, handle, models, player, request, sp, themes, updateCurrentlyPlaying, xhr;
+    var Theme, models, player, socket, sp, themes, updateCurrentlyPlaying;
     window.S = {
       serverURL: 'http://shipify-server.herokuapp.com/'
     };
@@ -83,7 +83,7 @@
 
     })();
     themes = {
-      nottombrown: new Theme('spotify:track:3MrRksHupTVEQ7YbA0FsZK', 13000, 54000),
+      nottombrown: new Theme('spotify:track:2BY7ALEWdloFHgQZG6VMLA', 12000, 44000),
       facedog: new Theme('spotify:track:2BY7ALEWdloFHgQZG6VMLA', 12000, 44000),
       waxman: new Theme('spotify:track:2BY7ALEWdloFHgQZG6VMLA', 12000, 44000)
     };
@@ -99,32 +99,25 @@
       }
     };
     setInterval(updateCurrentlyPlaying, 200);
-    window.parseCommit = function(commitJSON) {
-      S.thing = commitJSON;
-      return console.log(commitJSON);
-    };
-    xhr = new XMLHttpRequest();
-    request = 'http://search.twitter.com/search.json?q=open.spotify.com%2Ftrack&include_entities=true';
-    request = 'http://shipify-server.herokuapp.com/';
-    xhr.open('GET', request);
-    xhr.onreadystatechange = function() {
-      var data;
-      if (xhr.readyState !== 4) {
-        return;
+    socket = io.connect(S.serverURL);
+    socket.on('connect', function() {
+      return console.log("Connected!");
+    });
+    socket.on('commit', function(data) {
+      var commit, theme, username;
+      console.log(data);
+      commit = data;
+      username = commit.username;
+      theme = themes[username];
+      if (theme != null) {
+        return theme.play();
       }
-      console.log(xhr);
-      data = JSON.parse(xhr.responseText);
-      return handle(data);
-    };
-    xhr.send(null);
-    handle = function(data) {
-      return console.log(data);
-    };
+    });
     $('#play-trex').click(function() {
-      return themes.trex.play();
+      return themes.nottombrown.play();
     });
     return $('#play-cdog').click(function() {
-      return themes.cdog.play();
+      return themes.facedog.play();
     });
   });
 

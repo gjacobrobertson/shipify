@@ -62,7 +62,8 @@ $ ->
       setTimeout callback, @fadeTime
 
   themes =
-    nottombrown: new Theme('spotify:track:3MrRksHupTVEQ7YbA0FsZK', 13000, 54000)
+    # nottombrown: new Theme('spotify:track:3MrRksHupTVEQ7YbA0FsZK', 13000, 54000)
+    nottombrown: new Theme('spotify:track:2BY7ALEWdloFHgQZG6VMLA', 12000, 44000)
     facedog: new Theme('spotify:track:2BY7ALEWdloFHgQZG6VMLA', 12000, 44000)
     waxman: new Theme('spotify:track:2BY7ALEWdloFHgQZG6VMLA', 12000, 44000)
 
@@ -86,32 +87,20 @@ $ ->
   setInterval updateCurrentlyPlaying, 200
 
 
-  window.parseCommit = (commitJSON) ->
-    S.thing = commitJSON
-    console.log commitJSON
+  socket = io.connect(S.serverURL)
+  socket.on 'connect', () ->
+    console.log "Connected!"
 
 
+  socket.on 'commit', (data) ->
+    console.log(data)
+    commit = data
 
-
-  xhr = new XMLHttpRequest()
-  request = 'http://search.twitter.com/search.json?q=open.spotify.com%2Ftrack&include_entities=true'
-
-  request = 'http://shipify-server.herokuapp.com/'
-
-
-  xhr.open('GET', request)
-
-  xhr.onreadystatechange = ()->
-    if (xhr.readyState != 4)
-      return
-    console.log xhr
-    data = JSON.parse(xhr.responseText)
-    handle(data)
-
-  xhr.send(null)
-
-  handle = (data)->
-    console.log data
+    username = commit.username
+    theme = themes[username]
+    if theme?
+      theme.play()
+    # socket.emit 'my other event', { my: 'data' }
 
 
 
@@ -124,8 +113,8 @@ $ ->
   #
   #
   $('#play-trex').click ->
-    themes.trex.play()
+    themes.nottombrown.play()
 
 
   $('#play-cdog').click ->
-    themes.cdog.play()
+    themes.facedog.play()
