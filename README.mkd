@@ -2,21 +2,13 @@
 
 Play themesongs for people whenever they ship code to github.
 
-## Topics covered
+## Getting started
 
-#### Getting started
-
-Set up your [shipify-server](https://github.com/Grouper/shipify-server)
-
-Set a post commit-hook to ping your [shipify-server](https://github.com/Grouper/shipify-server)
-
-Sign up for a [developer account on Spotify](http://developer.spotify.com/en/spotify-apps-api/developer-signup/)
-
-Check out this repo to ~/Spotify/shipify
-
-Set your themesongs in settings.js (right click a song to get the URI)
-
-Type 'spotify:app:shipify' into your Spotify search bar
-
-Get Shipping
+* Set up your [shipify-server](https://github.com/Grouper/shipify-server)
+* Set a post commit-hook to ping your [shipify-server](https://github.com/Grouper/shipify-server)
+* Sign up for a [developer account on Spotify](http://developer.spotify.com/en/spotify-apps-api/developer-signup/)
+* Check out this repo to ~/Spotify/shipify
+* Set your themesongs in settings.js (right click a song to get the URI)
+* Type 'spotify:app:shipify' into your Spotify search bar
+* Get Shipping
 
