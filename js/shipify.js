@@ -124,7 +124,7 @@
     socket.on('connect', function() {
       return console.log("Connected!");
     });
-    socket.on('commit', function(data) {
+    return socket.on('commit', function(data) {
       var commit, theme;
       commit = data;
       username = commit.username;
@@ -132,12 +132,6 @@
       if (theme != null) {
         return theme.play();
       }
-    });
-    $('#play-trex').click(function() {
-      return themes.nottombrown.play();
-    });
-    return $('#play-cdog').click(function() {
-      return themes.facedog.play();
     });
   });
 

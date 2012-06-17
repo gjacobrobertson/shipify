@@ -68,7 +68,7 @@ $ ->
       setCorrectPosition()
 
     fadeOut: (callback=->)=>
-      # Does not currently work
+      # Volume changing does not currently work
       # http://stackoverflow.com/questions/10822979/change-volume-with-spotify-app-api
       timeInterval = @fadeTime/10
       for level in [10..1]
@@ -85,7 +85,7 @@ $ ->
     do (themes, username, song) ->
       themes[username] = new Theme(song[0], song[1], song[2], username)
 
-  # Loops
+  # Loop
   #
   #
   #
@@ -102,10 +102,13 @@ $ ->
   setInterval updateCurrentlyPlaying, 200
 
 
+  # Socket.io
+  #
+  #
+  #
   socket = io.connect(S.serverURL)
   socket.on 'connect', () ->
     console.log "Connected!"
-
 
   socket.on 'commit', (data) ->
     commit = data
@@ -114,21 +117,3 @@ $ ->
     theme = themes[username]
     if theme?
       theme.play()
-    # socket.emit 'my other event', { my: 'data' }
-
-
-
-  # checkForNewCommits()
-
-
-
-  # Buttons
-  #
-  #
-  #
-  $('#play-trex').click ->
-    themes.nottombrown.play()
-
-
-  $('#play-cdog').click ->
-    themes.facedog.play()
