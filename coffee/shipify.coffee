@@ -67,7 +67,6 @@ $ ->
     facedog: new Theme('spotify:track:2BY7ALEWdloFHgQZG6VMLA', 12000, 44000)
     waxman: new Theme('spotify:track:2BY7ALEWdloFHgQZG6VMLA', 12000, 44000)
 
-
   # Loops
   #
   #
