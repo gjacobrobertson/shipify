@@ -9,8 +9,6 @@ $ ->
     %td
       %a.preview play
   """)
-  console.log themeTemplate
-
 
 
   sp = getSpotifyApi(1)
@@ -25,12 +23,8 @@ $ ->
       @stop = stop
       @username = username
 
-      console.log @username
-      console.log @track
-
       @fadeTime = 1500
       @render()
-
 
     render: =>
       html = $ themeTemplate
@@ -114,7 +108,6 @@ $ ->
 
 
   socket.on 'commit', (data) ->
-    console.log(data)
     commit = data
 
     username = commit.username

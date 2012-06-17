@@ -7,7 +7,6 @@
   $(function() {
     var Theme, models, player, socket, song, sp, themeTemplate, themes, updateCurrentlyPlaying, username, _fn, _ref;
     themeTemplate = Haml("%tr\n  %td.username=username\n  %td.themesong=themesong\n  %td.range=range\n  %td\n    %a.preview play");
-    console.log(themeTemplate);
     sp = getSpotifyApi(1);
     models = sp.require("sp://import/scripts/api/models");
     player = models.player;
@@ -25,8 +24,6 @@
         this.start = start;
         this.stop = stop;
         this.username = username;
-        console.log(this.username);
-        console.log(this.track);
         this.fadeTime = 1500;
         this.render();
       }
@@ -129,7 +126,6 @@
     });
     socket.on('commit', function(data) {
       var commit, theme;
-      console.log(data);
       commit = data;
       username = commit.username;
       theme = themes[username];
