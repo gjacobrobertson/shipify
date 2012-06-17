@@ -1,0 +1,33 @@
+!!!
+%html
+  %head
+    :css
+      @import url('sp://import/css/eve.css');
+      @import url('sp://shipify/css/main.css');
+      @import url('sp://shipify/css/github.css');
+      @import url('sp://shipify/css/bootstrap.min.css');
+    %script{:src => "sp://shipify/js/lib/jquery.min.js"}
+    %script{:src => "sp://shipify/js/lib/socket.io.js"}
+    %script{:src => "sp://shipify/js/lib/haml.js"}
+    %script{:src => "sp://shipify/js/settings.js"}
+    %script{:src => "sp://shipify/js/shipify.js"}
+  %body
+    #index.section
+      #wrapper
+        %table.table.table-bordered.themesongs
+          %thead
+            %th
+              Username
+            %th
+              Theme song
+            %th
+              Range
+            %th
+        %h2{:style => "text-align: center"}
+          Shipping to
+          %div
+            %small#np
+    #new.section
+      #wrapper
+        %h3 Add a new themesong
+        %form

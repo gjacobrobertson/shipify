@@ -1,46 +1,50 @@
 <!DOCTYPE html>
 <html>
-    <head>
-
-        <style>
-            @import url('sp://import/css/eve.css');
-            @import url('sp://shipify/css/main.css');
-            @import url('sp://shipify/css/github.css');
-            @import url('sp://shipify/css/bootstrap.min.css');
-        </style>
-
-        <script src="sp://shipify/js/lib/jquery.min.js"></script>
-        <script src="sp://shipify/js/lib/socket.io.js"></script>
-        <script src="sp://shipify/js/lib/haml.js"></script>
-
-        <script src="sp://shipify/js/settings.js"></script>
-        <script src="sp://shipify/js/shipify.js"></script>
-
-    </head>
-    <body>
-        <div id="wrapper">
-
-          <table class="table table-bordered themesongs">
-            <thead>
-              <th>
-                Username
-              </th>
-              <th>
-                Themesong
-              </th>
-              <th>
-                Range
-              </th>
-              <th></th>
-
-          </table>
-
-          <h2 style="text-align: center">
-            Shipping to
-            <div>
-              <small id="np"></small>
-            </div
-          </h2>
-        </div><!-- /wrapper -->
-    </body>
+  <head>
+    <style>
+      /*<![CDATA[*/
+        @import url('sp://import/css/eve.css');
+        @import url('sp://shipify/css/main.css');
+        @import url('sp://shipify/css/github.css');
+        @import url('sp://shipify/css/bootstrap.min.css');
+      /*]]>*/
+    </style>
+    <script src='sp://shipify/js/lib/jquery.min.js'></script>
+    <script src='sp://shipify/js/lib/socket.io.js'></script>
+    <script src='sp://shipify/js/lib/haml.js'></script>
+    <script src='sp://shipify/js/settings.js'></script>
+    <script src='sp://shipify/js/shipify.js'></script>
+  </head>
+  <body>
+    <div class='section' id='index'>
+      <div id='wrapper'>
+        <table class='table table-bordered themesongs'>
+          <thead>
+            <th>
+              Username
+            </th>
+            <th>
+              Theme song
+            </th>
+            <th>
+              Range
+            </th>
+            <th></th>
+          </thead>
+        </table>
+        <h2 style='text-align: center'>
+          Shipping to
+          <div>
+            <small id='np'></small>
+          </div>
+        </h2>
+      </div>
+    </div>
+    <div class='section' id='new'>
+      <div id='wrapper'>
+        <h3>Add a new themesong</h3>
+        <form></form>
+      </div>
+    </div>
+  </body>
 </html>

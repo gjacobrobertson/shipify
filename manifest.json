@@ -19,9 +19,9 @@
 			}
 		},
 		{
-			"arguments": "tabs",
+			"arguments": "new",
 			"title": {
-				"en": "How to use tabs"
+				"en": "Add a themesong"
 			}
         }
 	],

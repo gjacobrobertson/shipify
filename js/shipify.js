@@ -5,8 +5,8 @@
   window.S || (window.S = {});
 
   $(function() {
-    var Theme, models, player, socket, song, sp, themeTemplate, themes, updateCurrentlyPlaying, username, _fn, _ref;
-    themeTemplate = Haml("%tr\n  %td.username=username\n  %td.themesong=themesong\n  %td.range=range\n  %td\n    %a.preview play");
+    var Theme, models, player, socket, song, sp, tabs, themeTemplate, themes, updateCurrentlyPlaying, username, _fn, _ref;
+    themeTemplate = Haml("%tr\n  %td.username=username\n  %td.themesong=themesong\n  %td.range=range\n  %td\n    %a.preview<> play\n    |\n    %a.remove<> remove");
     sp = getSpotifyApi(1);
     models = sp.require("sp://import/scripts/api/models");
     player = models.player;
@@ -18,6 +18,8 @@
         this.end = __bind(this.end, this);
 
         this.play = __bind(this.play, this);
+
+        this.remove = __bind(this.remove, this);
 
         this.render = __bind(this.render, this);
         this.track = models.Track.fromURI(track_uri);
@@ -39,7 +41,14 @@
         html.find('.preview').click(function() {
           return _this.play();
         });
+        html.find('.remove').click(function() {
+          return _this.remove();
+        });
         return html.appendTo($('.themesongs'));
+      };
+
+      Theme.prototype.remove = function() {
+        return console.log("Removed");
       };
 
       Theme.prototype.play = function() {
@@ -124,7 +133,7 @@
     socket.on('connect', function() {
       return console.log("Connected!");
     });
-    return socket.on('commit', function(data) {
+    socket.on('commit', function(data) {
       var commit, theme;
       commit = data;
       username = commit.username;
@@ -133,6 +142,15 @@
         return theme.play();
       }
     });
+    tabs = function() {
+      var args, current, sections;
+      args = models.application["arguments"];
+      current = $("#" + args[0]);
+      sections = $(".section").hide();
+      return current.show();
+    };
+    tabs();
+    return models.application.observe(models.EVENT.ARGUMENTSCHANGED, tabs);
   });
 
 }).call(this);

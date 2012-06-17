@@ -7,7 +7,9 @@ $ ->
     %td.themesong=themesong
     %td.range=range
     %td
-      %a.preview play
+      %a.preview<> play
+      |
+      %a.remove<> remove
   """)
 
 
@@ -33,7 +35,12 @@ $ ->
         range: "#{@start/1000}s - #{@stop/1000}s"
       html.find('.preview').click =>
         @play()
+      html.find('.remove').click =>
+        @remove()
       html.appendTo $('.themesongs')
+
+    remove: =>
+      console.log "Removed"
 
     play: =>
       S.playingTheme = true
@@ -117,3 +124,20 @@ $ ->
     theme = themes[username]
     if theme?
       theme.play()
+
+
+
+  # Tabs
+  #
+  #
+  #
+
+  tabs = ->
+    args = models.application.arguments
+    current = $("##{args[0]}")
+    sections = $(".section").hide()
+    current.show()
+
+  tabs()
+  models.application.observe models.EVENT.ARGUMENTSCHANGED, tabs
+
