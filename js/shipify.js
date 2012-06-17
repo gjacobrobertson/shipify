@@ -2,17 +2,10 @@
 (function() {
   var __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
 
+  window.S || (window.S = {});
+
   $(function() {
-    var Theme, models, player, socket, song, sp, themeTemplate, themes, themesongs, updateCurrentlyPlaying, username, _fn, _ref;
-    themesongs = {
-      nottombrown: ['spotify:track:3MrRksHupTVEQ7YbA0FsZK', 13000, 54000],
-      facedog: ['spotify:track:2BY7ALEWdloFHgQZG6VMLA', 12000, 44000],
-      waxman: ['spotify:track:2BY7ALEWdloFHgQZG6VMLA', 12000, 44000]
-    };
-    window.S = {
-      serverURL: 'http://shipify-server.herokuapp.com/',
-      themesongs: themesongs
-    };
+    var Theme, models, player, socket, song, sp, themeTemplate, themes, updateCurrentlyPlaying, username, _fn, _ref;
     themeTemplate = Haml("%tr\n  %td.username=username\n  %td.themesong=themesong\n  %td.range=range\n  %td\n    %a.preview play");
     console.log(themeTemplate);
     sp = getSpotifyApi(1);
@@ -94,7 +87,6 @@
           callback = function() {};
         }
         timeInterval = this.fadeTime / 10;
-        console.log(this.fadeTime);
         _fn = function(level) {
           return setTimeout(function() {
             player.volume = 0.1 * level;
@@ -113,15 +105,12 @@
     themes = {};
     _ref = S.themesongs;
     _fn = function(themes, username, song) {
-      console.log(username);
-      console.log(song);
       return themes[username] = new Theme(song[0], song[1], song[2], username);
     };
     for (username in _ref) {
       song = _ref[username];
       _fn(themes, username, song);
     }
-    console.log(themes);
     updateCurrentlyPlaying = function() {
       var currentTrack;
       if (!S.playingTheme) {

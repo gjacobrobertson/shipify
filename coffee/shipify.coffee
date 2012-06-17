@@ -1,16 +1,5 @@
-
-
+window.S ||= {} # initialized in settings.js
 $ ->
-
-  themesongs =
-    nottombrown: ['spotify:track:3MrRksHupTVEQ7YbA0FsZK', 13000, 54000]
-    facedog: ['spotify:track:2BY7ALEWdloFHgQZG6VMLA', 12000, 44000]
-    waxman: ['spotify:track:2BY7ALEWdloFHgQZG6VMLA', 12000, 44000]
-
-
-  window.S =
-    serverURL: 'http://shipify-server.herokuapp.com/'
-    themesongs: themesongs
 
   themeTemplate = Haml("""
   %tr
@@ -88,7 +77,6 @@ $ ->
       # Does not currently work
       # http://stackoverflow.com/questions/10822979/change-volume-with-spotify-app-api
       timeInterval = @fadeTime/10
-      console.log @fadeTime
       for level in [10..1]
         do (level) =>
           setTimeout =>
@@ -101,11 +89,8 @@ $ ->
 
   for username, song of S.themesongs
     do (themes, username, song) ->
-      console.log username
-      console.log song
       themes[username] = new Theme(song[0], song[1], song[2], username)
 
-  console.log themes
   # Loops
   #
   #
@@ -116,7 +101,6 @@ $ ->
 
       S.position = player.position
       S.track = currentTrack
-      # console.log S.position
 
       if currentTrack?
         $("#np").html "#{currentTrack}"
