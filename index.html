@@ -11,6 +11,8 @@
     </style>
     <script src='sp://shipify/js/lib/jquery.min.js'></script>
     <script src='sp://shipify/js/lib/socket.io.js'></script>
+    <script src='sp://shipify/js/lib/underscore-min.js'></script>
+    <script src='sp://shipify/js/lib/backbone.js'></script>
     <script src='sp://shipify/js/lib/haml.js'></script>
     <script src='sp://shipify/js/settings.js'></script>
     <script src='sp://shipify/js/shipify.js'></script>
@@ -31,6 +33,7 @@
             </th>
             <th></th>
           </thead>
+          <tbody></tbody>
         </table>
         <h2 style='text-align: center'>
           Shipping to
@@ -42,8 +45,59 @@
     </div>
     <div class='section' id='new'>
       <div id='wrapper'>
-        <h3>Add a new themesong</h3>
-        <form></form>
+        <div class='span6 offset1'>
+          <form class='form-horizontal'>
+            <fieldset>
+              <div class='control-group'>
+                <label class='control-label'>GitHub Username</label>
+                <div class='controls'>
+                  <input class='username input-xlarge' placeholder='nottombrown' value='nottombrown'>
+                </div>
+              </div>
+              <div class='control-group'>
+                <label class='control-label'>Spotify URI</label>
+                <div class='controls'>
+                  <input class='uri input-xlarge' placeholder='spotify:track:0GugYsbXWlfLOgsmtsdxzg' value='spotify:track:0GugYsbXWlfLOgsmtsdxzg'>
+                  <p>
+                    Right click a song and choose "Copy Spotify URI"
+                  </p>
+                </div>
+              </div>
+              <div class='control-group'>
+                <label class='control-label'>Start and Stop</label>
+                <div class='controls'>
+                  <input class='start input-small' placeholder='22000' value='22000'>
+                  -
+                  <input class='stop input-small' placeholder='54000' value='54000'>
+                  <p>
+                    In milliseconds. Leave blank to play the entire song
+                  </p>
+                </div>
+              </div>
+              <button class='btn' style='margin-left: 305px'>Create Themesong</button>
+            </fieldset>
+          </form>
+        </div>
+      </div>
+    </div>
+    <div class='section' id='settings'>
+      <div id='wrapper'>
+        <div class='span6 offset1'>
+          <form class='form-horizontal'>
+            <fieldset>
+              <div class='control-group'>
+                <label class='control-label'>Shipify Server</label>
+                <div class='controls'>
+                  <input class='input-xlarge' placeholder='shipify-server.herokuapp.com'>
+                    shipify-server.herokuapp.com
+                  </input>
+                  <p>This server will relay updates from github.</p>
+                  <p>Use Grouper/shipify-server on heroku to set up your own.</p>
+                </div>
+              </div>
+            </fieldset>
+          </form>
+        </div>
       </div>
     </div>
   </body>

@@ -19,10 +19,16 @@
 			}
 		},
 		{
-			"arguments": "new",
-			"title": {
-				"en": "Add a themesong"
-			}
+      "arguments": "new",
+      "title": {
+        "en": "Add a themesong"
+      }
+    },
+    {
+      "arguments": "settings",
+      "title": {
+        "en": "Settings"
+      }
         }
 	],
 	"RequiredInterface": 1,

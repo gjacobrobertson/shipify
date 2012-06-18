@@ -1,5 +1,14 @@
 window.S ||= {} # initialized in settings.js
+
+
+
 $ ->
+
+
+  # // The server running shipify-server
+  S.serverURL ||= 'http://shipify-server.herokuapp.com/'
+
+  console.log S
 
   themeTemplate = Haml("""
   %tr
@@ -18,7 +27,36 @@ $ ->
   player = models.player
 
 
-  class Theme
+  class ThemeList extends Backbone.Model
+    initialize: ->
+      @on 'change', @persist
+
+    persist: =>
+      localStorage.setItem('themeList', JSON.stringify(@toJSON()))
+
+    renderThemeViews: =>
+      console.log TL.toJSON()
+      $('.themesongs tbody').empty()
+
+      @themes = {}
+      for username, song of TL.toJSON()
+        do ( username, song) =>
+          @themes[username] = new ThemeView(song[0], song[1], song[2], username)
+
+
+  # Initialize Themelist
+  Boot = JSON.parse localStorage.getItem('themeList')
+  if !Boot?
+    Boot =
+      nottombrown: ['spotify:track:0GugYsbXWlfLOgsmtsdxzg', 12000, 50000]
+      facedog: ['spotify:track:2BY7ALEWdloFHgQZG6VMLA', 12000, 44000]
+      waxman: ['spotify:track:3MrRksHupTVEQ7YbA0FsZK', 12000, 44000]
+
+  TL = new ThemeList(Boot)
+
+  # TL.persist()
+
+  class ThemeView extends Backbone.View
     constructor: (track_uri, start, stop, username) ->
       @track = models.Track.fromURI(track_uri)
       @start = start
@@ -29,18 +67,22 @@ $ ->
       @render()
 
     render: =>
-      html = $ themeTemplate
+      @el = $ themeTemplate
         username: @username
         themesong: @track
         range: "#{@start/1000}s - #{@stop/1000}s"
-      html.find('.preview').click =>
+
+      @el.find('.preview').click =>
         @play()
-      html.find('.remove').click =>
+      @el.find('.remove').click =>
         @remove()
-      html.appendTo $('.themesongs')
+      @el.appendTo $('.themesongs tbody')
 
     remove: =>
       console.log "Removed"
+      TL.unset(@username)
+      console.log TL
+      @el.hide()
 
     play: =>
       S.playingTheme = true
@@ -86,11 +128,11 @@ $ ->
           , timeInterval*level
       setTimeout callback, @fadeTime
 
-  themes = {}
-
-  for username, song of S.themesongs
-    do (themes, username, song) ->
-      themes[username] = new Theme(song[0], song[1], song[2], username)
+  # Rendering
+  #
+  #
+  #
+  TL.renderThemeViews()
 
   # Loop
   #
@@ -121,11 +163,9 @@ $ ->
     commit = data
 
     username = commit.username
-    theme = themes[username]
+    theme = S.themes[username]
     if theme?
       theme.play()
-
-
 
   # Tabs
   #
@@ -141,3 +181,23 @@ $ ->
   tabs()
   models.application.observe models.EVENT.ARGUMENTSCHANGED, tabs
 
+
+  # Adding a new themesong
+  #
+  #
+  #
+  $("#new button").click (e) ->
+    console.log "New theme"
+    theme =
+      username: $("#new .username").val()
+      uri: $("#new .uri").val()
+      start: parseInt $("#new .start").val()
+      stop: parseInt $("#new .stop").val()
+
+    TL.set(theme.username, [theme.uri, theme.start, theme.stop])
+    TL.renderThemeViews()
+    console.log theme
+    console.log TL.toJSON()
+
+    e.preventDefault()
+    return false

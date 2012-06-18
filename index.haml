@@ -8,6 +8,8 @@
       @import url('sp://shipify/css/bootstrap.min.css');
     %script{:src => "sp://shipify/js/lib/jquery.min.js"}
     %script{:src => "sp://shipify/js/lib/socket.io.js"}
+    %script{:src => "sp://shipify/js/lib/underscore-min.js"}
+    %script{:src => "sp://shipify/js/lib/backbone.js"}
     %script{:src => "sp://shipify/js/lib/haml.js"}
     %script{:src => "sp://shipify/js/settings.js"}
     %script{:src => "sp://shipify/js/shipify.js"}
@@ -23,11 +25,52 @@
             %th
               Range
             %th
+          %tbody
         %h2{:style => "text-align: center"}
           Shipping to
           %div
             %small#np
+
     #new.section
       #wrapper
-        %h3 Add a new themesong
-        %form
+        .span6.offset1
+          %form.form-horizontal
+            %fieldset
+              .control-group
+                %label.control-label GitHub Username
+                .controls
+                  %input.username.input-xlarge{ :placeholder => 'nottombrown', :value => 'nottombrown'}
+
+              .control-group
+                %label.control-label Spotify URI
+                .controls
+                  %input.uri.input-xlarge{ :placeholder => 'spotify:track:0GugYsbXWlfLOgsmtsdxzg', :value => 'spotify:track:0GugYsbXWlfLOgsmtsdxzg' }
+
+                  %p
+                    Right click a song and choose "Copy Spotify URI"
+
+              .control-group
+                %label.control-label Start and Stop
+                .controls
+                  %input.start.input-small{ :placeholder => 22000, :value => 22000}
+                  = "-"
+                  %input.stop.input-small{ :placeholder => 54000, :value => 54000 }
+                  %p
+                    In milliseconds. Leave blank to play the entire song
+
+              %button.btn{ :style => "margin-left: 305px"} Create Themesong
+
+
+
+    #settings.section
+      #wrapper
+        .span6.offset1
+          %form.form-horizontal
+            %fieldset
+              .control-group
+                %label.control-label Shipify Server
+                .controls
+                  %input.input-xlarge{ :placeholder => 'shipify-server.herokuapp.com'}
+                    shipify-server.herokuapp.com
+                  %p This server will relay updates from github.
+                  %p Use Grouper/shipify-server on heroku to set up your own.
