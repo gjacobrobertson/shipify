@@ -6,6 +6,7 @@ $ ->
 
 
   # // The server running shipify-server
+  S.serverURL = JSON.parse localStorage.getItem('serverURL')
   S.serverURL ||= 'http://shipify-server.herokuapp.com/'
 
   console.log S
@@ -196,8 +197,20 @@ $ ->
 
     TL.set(theme.username, [theme.uri, theme.start, theme.stop])
     TL.renderThemeViews()
-    console.log theme
-    console.log TL.toJSON()
+    e.preventDefault()
+    return false
+
+
+  # Updating settings
+  #
+  #
+  #
+  $("#settings .server").val(S.serverURL)
+  $("#settings .server").change (e) ->
+    console.log "New server"
+    S.serverURL = $(@).val()
+
+    localStorage.setItem('serverURL', JSON.stringify(S.serverURL))
 
     e.preventDefault()
     return false

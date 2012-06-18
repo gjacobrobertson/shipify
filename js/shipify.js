@@ -8,6 +8,7 @@
 
   $(function() {
     var Boot, TL, ThemeList, ThemeView, models, player, socket, sp, tabs, themeTemplate, updateCurrentlyPlaying;
+    S.serverURL = JSON.parse(localStorage.getItem('serverURL'));
     S.serverURL || (S.serverURL = 'http://shipify-server.herokuapp.com/');
     console.log(S);
     themeTemplate = Haml("%tr\n  %td.username=username\n  %td.themesong=themesong\n  %td.range=range\n  %td\n    %a.preview<> play\n    |\n    %a.remove<> remove");
@@ -199,7 +200,7 @@
     };
     tabs();
     models.application.observe(models.EVENT.ARGUMENTSCHANGED, tabs);
-    return $("#new button").click(function(e) {
+    $("#new button").click(function(e) {
       var theme;
       console.log("New theme");
       theme = {
@@ -210,8 +211,14 @@
       };
       TL.set(theme.username, [theme.uri, theme.start, theme.stop]);
       TL.renderThemeViews();
-      console.log(theme);
-      console.log(TL.toJSON());
+      e.preventDefault();
+      return false;
+    });
+    $("#settings .server").val(S.serverURL);
+    return $("#settings .server").change(function(e) {
+      console.log("New server");
+      S.serverURL = $(this).val();
+      localStorage.setItem('serverURL', JSON.stringify(S.serverURL));
       e.preventDefault();
       return false;
     });
