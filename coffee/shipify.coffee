@@ -1,9 +1,12 @@
 window.S ||= {} # initialized in settings.js
 
-
+# Format is github_username: ['spotify_track_uri', start_in_ms, stop_in_ms]
+S.defaultThemes =
+  nottombrown: ['spotify:track:0GugYsbXWlfLOgsmtsdxzg', 12000, 50000]
+  facedog: ['spotify:track:2BY7ALEWdloFHgQZG6VMLA', 12000, 44000]
+  waxman: ['spotify:track:3MrRksHupTVEQ7YbA0FsZK', 12000, 44000]
 
 $ ->
-
 
   # // The server running shipify-server
   S.serverURL = JSON.parse localStorage.getItem('serverURL')
@@ -47,11 +50,8 @@ $ ->
 
   # Initialize Themelist
   Boot = JSON.parse localStorage.getItem('themeList')
-  if !Boot?
-    Boot =
-      nottombrown: ['spotify:track:0GugYsbXWlfLOgsmtsdxzg', 12000, 50000]
-      facedog: ['spotify:track:2BY7ALEWdloFHgQZG6VMLA', 12000, 44000]
-      waxman: ['spotify:track:3MrRksHupTVEQ7YbA0FsZK', 12000, 44000]
+  Boot = S.defaultThemes
+      
 
   TL = new ThemeList(Boot)
 

@@ -6,6 +6,12 @@
 
   window.S || (window.S = {});
 
+  S.defaultThemes = {
+    nottombrown: ['spotify:track:0GugYsbXWlfLOgsmtsdxzg', 12000, 50000],
+    facedog: ['spotify:track:2BY7ALEWdloFHgQZG6VMLA', 12000, 44000],
+    waxman: ['spotify:track:3MrRksHupTVEQ7YbA0FsZK', 12000, 44000]
+  };
+
   $(function() {
     var Boot, TL, ThemeList, ThemeView, models, player, socket, sp, tabs, themeTemplate, updateCurrentlyPlaying;
     S.serverURL = JSON.parse(localStorage.getItem('serverURL'));
@@ -55,13 +61,7 @@
 
     })(Backbone.Model);
     Boot = JSON.parse(localStorage.getItem('themeList'));
-    if (!(Boot != null)) {
-      Boot = {
-        nottombrown: ['spotify:track:0GugYsbXWlfLOgsmtsdxzg', 12000, 50000],
-        facedog: ['spotify:track:2BY7ALEWdloFHgQZG6VMLA', 12000, 44000],
-        waxman: ['spotify:track:3MrRksHupTVEQ7YbA0FsZK', 12000, 44000]
-      };
-    }
+    Boot = S.defaultThemes;
     TL = new ThemeList(Boot);
     ThemeView = (function(_super) {
 
