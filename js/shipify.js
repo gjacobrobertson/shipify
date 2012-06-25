@@ -186,7 +186,7 @@
       var commit, theme, username;
       commit = data;
       username = commit.username;
-      theme = S.themes[username];
+      theme = TL.themes[username];
       if (theme != null) {
         return theme.play();
       }

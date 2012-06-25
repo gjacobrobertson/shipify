@@ -164,7 +164,7 @@ $ ->
     commit = data
 
     username = commit.username
-    theme = S.themes[username]
+    theme = TL.themes[username]
     if theme?
       theme.play()
 
