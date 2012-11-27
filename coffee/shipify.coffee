@@ -103,6 +103,8 @@ $ ->
         S.playingTheme = true
 
         player.play(@track_uri)
+        updateCurrentlyPlaying()
+        console.log('PLAYING')
         setTimeout @end, (@stop-@start)
 
 
@@ -110,18 +112,6 @@ $ ->
       if S.playingTheme
         S.playingTheme = false
         player.playing = false
-
-    fadeOut: (callback=->)=>
-      # Volume changing does not currently work
-      # http://stackoverflow.com/questions/10822979/change-volume-with-spotify-app-api
-      timeInterval = @fadeTime/10
-      for level in [10..1]
-        do (level) =>
-          setTimeout =>
-            player.volume = 0.1*level
-            console.log 0.1*level
-          , timeInterval*level
-      setTimeout callback, @fadeTime
 
   # Rendering
   #
@@ -134,13 +124,16 @@ $ ->
   #
   #
   updateCurrentlyPlaying = ->
-    if !S.playingTheme
+    if S.playingTheme
+      console.log(player.track.name)
       currentTrack = player.track
 
       S.track = currentTrack
 
       if currentTrack?
         $("#np").html "#{currentTrack}"
+    else
+      $("#np").empty()
 
   setInterval updateCurrentlyPlaying, 200
 

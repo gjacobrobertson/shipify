@@ -71,8 +71,6 @@
       __extends(ThemeView, _super);
 
       function ThemeView(track_uri, start, stop, username) {
-        this.fadeOut = __bind(this.fadeOut, this);
-
         this.end = __bind(this.end, this);
 
         this.play = __bind(this.play, this);
@@ -130,6 +128,8 @@
         if (!S.playingTheme) {
           S.playingTheme = true;
           player.play(this.track_uri);
+          updateCurrentlyPlaying();
+          console.log('PLAYING');
           return setTimeout(this.end, this.stop - this.start);
         }
       };
@@ -141,37 +141,21 @@
         }
       };
 
-      ThemeView.prototype.fadeOut = function(callback) {
-        var level, timeInterval, _fn, _i,
-          _this = this;
-        if (callback == null) {
-          callback = function() {};
-        }
-        timeInterval = this.fadeTime / 10;
-        _fn = function(level) {
-          return setTimeout(function() {
-            player.volume = 0.1 * level;
-            return console.log(0.1 * level);
-          }, timeInterval * level);
-        };
-        for (level = _i = 10; _i >= 1; level = --_i) {
-          _fn(level);
-        }
-        return setTimeout(callback, this.fadeTime);
-      };
-
       return ThemeView;
 
     })(Backbone.View);
     TL.renderThemeViews();
     updateCurrentlyPlaying = function() {
       var currentTrack;
-      if (!S.playingTheme) {
+      if (S.playingTheme) {
+        console.log(player.track.name);
         currentTrack = player.track;
         S.track = currentTrack;
         if (currentTrack != null) {
           return $("#np").html("" + currentTrack);
         }
+      } else {
+        return $("#np").empty();
       }
     };
     setInterval(updateCurrentlyPlaying, 200);
