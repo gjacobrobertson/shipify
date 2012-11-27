@@ -22,6 +22,8 @@ $ ->
     %td
       %a.preview<> play
       |
+      %a.stop<> stop
+      |
       %a.remove<> remove
   """)
 
@@ -39,13 +41,15 @@ $ ->
       localStorage.setItem('themeList', JSON.stringify(@toJSON()))
 
     renderThemeViews: =>
-      console.log TL.toJSON()
       $('.themesongs tbody').empty()
 
       @themes = {}
       for username, song of TL.toJSON()
         do ( username, song) =>
-          @themes[username] = new ThemeView(song[0], song[1], song[2], username)
+          track_uri = song[0]
+          start = song[1]
+          stop = song[2]
+          @themes[username] = new ThemeView(track_uri, start, stop, username)
 
 
   # Initialize Themelist
@@ -55,11 +59,19 @@ $ ->
 
   TL = new ThemeList(Boot)
 
-  # TL.persist()
-
   class ThemeView extends Backbone.View
     constructor: (track_uri, start, stop, username) ->
+      lpad = (value, padding) ->
+        zeroes = "0"
+        zeroes += "0" for i in [1..padding]
+
+        (zeroes + value).slice(padding * -1)
+
       @track = models.Track.fromURI(track_uri)
+      minutes = Math.floor(start / 60000)
+      seconds = lpad(Math.floor(((start % 60000) / 1000)), 2)
+      @track_uri = track_uri + '#' + minutes + ':' + seconds
+      console.log(@track)
       @start = start
       @stop = stop
       @username = username
@@ -75,47 +87,29 @@ $ ->
 
       @el.find('.preview').click =>
         @play()
+      @el.find('.stop').click =>
+        @end()
       @el.find('.remove').click =>
         @remove()
+
       @el.appendTo $('.themesongs tbody')
 
     remove: =>
-      console.log "Removed"
       TL.unset(@username)
-      console.log TL
       @el.hide()
 
     play: =>
-      S.playingTheme = true
-      player.track = @track
-      setTimeout @end, (@stop-@start)
+      if !S.playingTheme
+        S.playingTheme = true
 
-      setCorrectPosition = =>
-        # Give us some time to load the new track
-        if player.track.name != @track.name
-          setTimeout ->
-            setCorrectPosition()
-          , 100
-        else
-          player.position = @start
+        player.play(@track_uri)
+        setTimeout @end, (@stop-@start)
 
-      setCorrectPosition()
 
     end: =>
-      player.track = S.track
-
-      # Give us some time to load the new track
-      setCorrectPosition = =>
-        player.position = S.position
-
-        if player.track.name != S.track.name
-          setTimeout ->
-            setCorrectPosition()
-          , 100
-        else
-          S.playingTheme = false
-
-      setCorrectPosition()
+      if S.playingTheme
+        S.playingTheme = false
+        player.playing = false
 
     fadeOut: (callback=->)=>
       # Volume changing does not currently work
@@ -143,7 +137,6 @@ $ ->
     if !S.playingTheme
       currentTrack = player.track
 
-      S.position = player.position
       S.track = currentTrack
 
       if currentTrack?

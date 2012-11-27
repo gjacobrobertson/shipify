@@ -17,7 +17,7 @@
     S.serverURL = JSON.parse(localStorage.getItem('serverURL'));
     S.serverURL || (S.serverURL = 'http://shipify-server.herokuapp.com/');
     console.log(S);
-    themeTemplate = Haml("%tr\n  %td.username=username\n  %td.themesong=themesong\n  %td.range=range\n  %td\n    %a.preview<> play\n    |\n    %a.remove<> remove");
+    themeTemplate = Haml("%tr\n  %td.username=username\n  %td.themesong=themesong\n  %td.range=range\n  %td\n    %a.preview<> play\n    |\n    %a.stop<> stop\n    |\n    %a.remove<> remove");
     sp = getSpotifyApi(1);
     models = sp.require("sp://import/scripts/api/models");
     player = models.player;
@@ -43,7 +43,6 @@
       ThemeList.prototype.renderThemeViews = function() {
         var song, username, _ref, _results,
           _this = this;
-        console.log(TL.toJSON());
         $('.themesongs tbody').empty();
         this.themes = {};
         _ref = TL.toJSON();
@@ -51,7 +50,11 @@
         for (username in _ref) {
           song = _ref[username];
           _results.push((function(username, song) {
-            return _this.themes[username] = new ThemeView(song[0], song[1], song[2], username);
+            var start, stop, track_uri;
+            track_uri = song[0];
+            start = song[1];
+            stop = song[2];
+            return _this.themes[username] = new ThemeView(track_uri, start, stop, username);
           })(username, song));
         }
         return _results;
@@ -77,7 +80,21 @@
         this.remove = __bind(this.remove, this);
 
         this.render = __bind(this.render, this);
+
+        var lpad, minutes, seconds;
+        lpad = function(value, padding) {
+          var i, zeroes, _i;
+          zeroes = "0";
+          for (i = _i = 1; 1 <= padding ? _i <= padding : _i >= padding; i = 1 <= padding ? ++_i : --_i) {
+            zeroes += "0";
+          }
+          return (zeroes + value).slice(padding * -1);
+        };
         this.track = models.Track.fromURI(track_uri);
+        minutes = Math.floor(start / 60000);
+        seconds = lpad(Math.floor((start % 60000) / 1000), 2);
+        this.track_uri = track_uri + '#' + minutes + ':' + seconds;
+        console.log(this.track);
         this.start = start;
         this.stop = stop;
         this.username = username;
@@ -95,6 +112,9 @@
         this.el.find('.preview').click(function() {
           return _this.play();
         });
+        this.el.find('.stop').click(function() {
+          return _this.end();
+        });
         this.el.find('.remove').click(function() {
           return _this.remove();
         });
@@ -102,45 +122,23 @@
       };
 
       ThemeView.prototype.remove = function() {
-        console.log("Removed");
         TL.unset(this.username);
-        console.log(TL);
         return this.el.hide();
       };
 
       ThemeView.prototype.play = function() {
-        var setCorrectPosition,
-          _this = this;
-        S.playingTheme = true;
-        player.track = this.track;
-        setTimeout(this.end, this.stop - this.start);
-        setCorrectPosition = function() {
-          if (player.track.name !== _this.track.name) {
-            return setTimeout(function() {
-              return setCorrectPosition();
-            }, 100);
-          } else {
-            return player.position = _this.start;
-          }
-        };
-        return setCorrectPosition();
+        if (!S.playingTheme) {
+          S.playingTheme = true;
+          player.play(this.track_uri);
+          return setTimeout(this.end, this.stop - this.start);
+        }
       };
 
       ThemeView.prototype.end = function() {
-        var setCorrectPosition,
-          _this = this;
-        player.track = S.track;
-        setCorrectPosition = function() {
-          player.position = S.position;
-          if (player.track.name !== S.track.name) {
-            return setTimeout(function() {
-              return setCorrectPosition();
-            }, 100);
-          } else {
-            return S.playingTheme = false;
-          }
-        };
-        return setCorrectPosition();
+        if (S.playingTheme) {
+          S.playingTheme = false;
+          return player.playing = false;
+        }
       };
 
       ThemeView.prototype.fadeOut = function(callback) {
@@ -170,7 +168,6 @@
       var currentTrack;
       if (!S.playingTheme) {
         currentTrack = player.track;
-        S.position = player.position;
         S.track = currentTrack;
         if (currentTrack != null) {
           return $("#np").html("" + currentTrack);
