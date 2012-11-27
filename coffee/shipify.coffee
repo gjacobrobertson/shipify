@@ -50,8 +50,8 @@ $ ->
 
   # Initialize Themelist
   Boot = JSON.parse localStorage.getItem('themeList')
-  Boot = S.defaultThemes
-      
+  Boot ||= S.defaultThemes
+
 
   TL = new ThemeList(Boot)
 
