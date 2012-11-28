@@ -71,7 +71,7 @@ $ ->
       @el = $ themeTemplate
         username: @username
         themesong: @track
-        range: "#{@start/1000}s - #{@stop/1000}s"
+        range: "#{@start.getMinutes()}:#{@start.getSeconds()} - #{@stop.getMinutes()}:#{@stop.getSeconds()}"
 
       @el.find('.preview').click =>
         @play()

@@ -91,7 +91,7 @@
         this.el = $(themeTemplate({
           username: this.username,
           themesong: this.track,
-          range: "" + (this.start / 1000) + "s - " + (this.stop / 1000) + "s"
+          range: "" + (this.start.getMinutes()) + ":" + (this.start.getSeconds()) + " - " + (this.stop.getMinutes()) + ":" + (this.stop.getSeconds())
         }));
         this.el.find('.preview').click(function() {
           return _this.play();
