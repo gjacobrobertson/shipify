@@ -182,6 +182,9 @@
         start: parseTime($("#new .start").val()),
         stop: parseTime($("#new .stop").val())
       };
+      if (theme.start === null || theme.stop === null) {
+        return false;
+      }
       TL.set(theme.username, [theme.uri, theme.start, theme.stop]);
       TL.renderThemeViews();
       e.preventDefault();
