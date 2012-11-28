@@ -2,7 +2,7 @@ window.S ||= {} # initialized in settings.js
 
 # Format is github_username: ['spotify_track_uri', start_in_ms, stop_in_ms]
 S.defaultThemes =
-  nottombrown: ['spotify:track:0GugYsbXWlfLOgsmtsdxzg', 12000, 50000]
+  nottombrown: ['spotify:track:0GugYsbXWlfLOgsmtsdxzg', 12000, 54000]
   facedog: ['spotify:track:2BY7ALEWdloFHgQZG6VMLA', 12000, 44000]
   waxman: ['spotify:track:3MrRksHupTVEQ7YbA0FsZK', 12000, 44000]
 
@@ -47,7 +47,7 @@ $ ->
           track_uri = song[0]
           start = song[1]
           stop = song[2]
-          @themes[username] = new ThemeView(track_uri, start, stop, username)
+          @themes[username] = new ThemeView(track_uri, new Date(start), new Date(stop), username)
 
 
   # Initialize Themelist
@@ -59,16 +59,8 @@ $ ->
 
   class ThemeView extends Backbone.View
     constructor: (track_uri, start, stop, username) ->
-      lpad = (value, padding) ->
-        zeroes = "0"
-        zeroes += "0" for i in [1..padding]
-
-        (zeroes + value).slice(padding * -1)
-
+      @track_uri = track_uri + '#' + start.getMinutes() + ':' + start.getSeconds()
       @track = models.Track.fromURI(track_uri)
-      minutes = Math.floor(start / 60000)
-      seconds = lpad(Math.floor(((start % 60000) / 1000)), 2)
-      @track_uri = track_uri + '#' + minutes + ':' + seconds
       @start = start
       @stop = stop
       @username = username
@@ -166,11 +158,22 @@ $ ->
   #
   $("#new button").click (e) ->
     console.log "New theme"
+
+    parseTime = (time) ->
+      timeRegexp = /(\d{1,2}):(\d{2})/g
+      match = timeRegexp.exec(time)
+      if not match
+        return null
+      console.log(match[1])
+      console.log(match[2])
+      console.log(1000 * ( 60 * parseInt(match[1]) + parseInt(match[2]) ))
+      return 1000 * ( 60 * parseInt(match[1]) + parseInt(match[2]) )
+
     theme =
       username: $("#new .username").val()
       uri: $("#new .uri").val()
-      start: parseInt $("#new .start").val()
-      stop: parseInt $("#new .stop").val()
+      start: parseTime $("#new .start").val()
+      stop: parseTime $("#new .stop").val()
 
     TL.set(theme.username, [theme.uri, theme.start, theme.stop])
     TL.renderThemeViews()

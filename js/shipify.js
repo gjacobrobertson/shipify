@@ -7,7 +7,7 @@
   window.S || (window.S = {});
 
   S.defaultThemes = {
-    nottombrown: ['spotify:track:0GugYsbXWlfLOgsmtsdxzg', 12000, 50000],
+    nottombrown: ['spotify:track:0GugYsbXWlfLOgsmtsdxzg', 12000, 54000],
     facedog: ['spotify:track:2BY7ALEWdloFHgQZG6VMLA', 12000, 44000],
     waxman: ['spotify:track:3MrRksHupTVEQ7YbA0FsZK', 12000, 44000]
   };
@@ -54,7 +54,7 @@
             track_uri = song[0];
             start = song[1];
             stop = song[2];
-            return _this.themes[username] = new ThemeView(track_uri, start, stop, username);
+            return _this.themes[username] = new ThemeView(track_uri, new Date(start), new Date(stop), username);
           })(username, song));
         }
         return _results;
@@ -78,20 +78,8 @@
         this.remove = __bind(this.remove, this);
 
         this.render = __bind(this.render, this);
-
-        var lpad, minutes, seconds;
-        lpad = function(value, padding) {
-          var i, zeroes, _i;
-          zeroes = "0";
-          for (i = _i = 1; 1 <= padding ? _i <= padding : _i >= padding; i = 1 <= padding ? ++_i : --_i) {
-            zeroes += "0";
-          }
-          return (zeroes + value).slice(padding * -1);
-        };
+        this.track_uri = track_uri + '#' + start.getMinutes() + ':' + start.getSeconds();
         this.track = models.Track.fromURI(track_uri);
-        minutes = Math.floor(start / 60000);
-        seconds = lpad(Math.floor((start % 60000) / 1000), 2);
-        this.track_uri = track_uri + '#' + minutes + ':' + seconds;
         this.start = start;
         this.stop = stop;
         this.username = username;
@@ -174,13 +162,25 @@
     tabs();
     models.application.observe(models.EVENT.ARGUMENTSCHANGED, tabs);
     $("#new button").click(function(e) {
-      var theme;
+      var parseTime, theme;
       console.log("New theme");
+      parseTime = function(time) {
+        var match, timeRegexp;
+        timeRegexp = /(\d{1,2}):(\d{2})/g;
+        match = timeRegexp.exec(time);
+        if (!match) {
+          return null;
+        }
+        console.log(match[1]);
+        console.log(match[2]);
+        console.log(1000 * (60 * parseInt(match[1]) + parseInt(match[2])));
+        return 1000 * (60 * parseInt(match[1]) + parseInt(match[2]));
+      };
       theme = {
         username: $("#new .username").val(),
         uri: $("#new .uri").val(),
-        start: parseInt($("#new .start").val()),
-        stop: parseInt($("#new .stop").val())
+        start: parseTime($("#new .start").val()),
+        stop: parseTime($("#new .stop").val())
       };
       TL.set(theme.username, [theme.uri, theme.start, theme.stop]);
       TL.renderThemeViews();
