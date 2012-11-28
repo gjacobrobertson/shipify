@@ -22,8 +22,6 @@ $ ->
     %td
       %a.preview<> play
       |
-      %a.stop<> stop
-      |
       %a.remove<> remove
   """)
 
@@ -71,12 +69,10 @@ $ ->
       minutes = Math.floor(start / 60000)
       seconds = lpad(Math.floor(((start % 60000) / 1000)), 2)
       @track_uri = track_uri + '#' + minutes + ':' + seconds
-      console.log(@track)
       @start = start
       @stop = stop
       @username = username
 
-      @fadeTime = 1500
       @render()
 
     render: =>
@@ -87,8 +83,6 @@ $ ->
 
       @el.find('.preview').click =>
         @play()
-      @el.find('.stop').click =>
-        @end()
       @el.find('.remove').click =>
         @remove()
 
@@ -103,8 +97,6 @@ $ ->
         S.playingTheme = true
 
         player.play(@track_uri)
-        updateCurrentlyPlaying()
-        console.log('PLAYING')
         setTimeout @end, (@stop-@start)
 
 
@@ -125,7 +117,6 @@ $ ->
   #
   updateCurrentlyPlaying = ->
     if S.playingTheme
-      console.log(player.track.name)
       currentTrack = player.track
 
       S.track = currentTrack

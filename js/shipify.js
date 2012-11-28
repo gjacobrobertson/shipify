@@ -17,7 +17,7 @@
     S.serverURL = JSON.parse(localStorage.getItem('serverURL'));
     S.serverURL || (S.serverURL = 'http://shipify-server.herokuapp.com/');
     console.log(S);
-    themeTemplate = Haml("%tr\n  %td.username=username\n  %td.themesong=themesong\n  %td.range=range\n  %td\n    %a.preview<> play\n    |\n    %a.stop<> stop\n    |\n    %a.remove<> remove");
+    themeTemplate = Haml("%tr\n  %td.username=username\n  %td.themesong=themesong\n  %td.range=range\n  %td\n    %a.preview<> play\n    |\n    %a.remove<> remove");
     sp = getSpotifyApi(1);
     models = sp.require("sp://import/scripts/api/models");
     player = models.player;
@@ -92,11 +92,9 @@
         minutes = Math.floor(start / 60000);
         seconds = lpad(Math.floor((start % 60000) / 1000), 2);
         this.track_uri = track_uri + '#' + minutes + ':' + seconds;
-        console.log(this.track);
         this.start = start;
         this.stop = stop;
         this.username = username;
-        this.fadeTime = 1500;
         this.render();
       }
 
@@ -109,9 +107,6 @@
         }));
         this.el.find('.preview').click(function() {
           return _this.play();
-        });
-        this.el.find('.stop').click(function() {
-          return _this.end();
         });
         this.el.find('.remove').click(function() {
           return _this.remove();
@@ -128,8 +123,6 @@
         if (!S.playingTheme) {
           S.playingTheme = true;
           player.play(this.track_uri);
-          updateCurrentlyPlaying();
-          console.log('PLAYING');
           return setTimeout(this.end, this.stop - this.start);
         }
       };
@@ -148,7 +141,6 @@
     updateCurrentlyPlaying = function() {
       var currentTrack;
       if (S.playingTheme) {
-        console.log(player.track.name);
         currentTrack = player.track;
         S.track = currentTrack;
         if (currentTrack != null) {
